@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <h1>Visitor Management System</h1>
+
+    <form id="visitorForm">
+        <label for="visitorName">Visitor Name:</label>
+        <input type="text" id="visitorName" name="visitorName" required>
+
+        <label for="destination">Destination:</label>
+        <input type="text" id="destination" name="destination" required>
+
+        <label for="purpose">Purpose of Visit:</label>
+        <input type="text" id="purpose" name="purpose" required>
+
+        <label for="modeOfTravel">Mode of Travel:</label>
+        <input type="text" id="modeOfTravel" name="modeOfTravel" required>
+
+        <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+
+    <table id="recordsTable">
+        <thead>
+            <tr>
+                <th>Visitor Name</th>
+                <th>Destination</th>
+                <th>Purpose</th>
+                <th>Mode of Travel</th>
+            </tr>
+        </thead>
+        <tbody id="recordsBody"></tbody>
+    </table>
+
+    <script src="script.js"></script>
+</body>
+</html>
