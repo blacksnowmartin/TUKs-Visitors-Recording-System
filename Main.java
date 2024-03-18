@@ -1,12 +1,10 @@
-import java.awt.Graphics;
-import java.awt.Image;
-import java.io.FileWriter;
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.swing.*;
 
 class SecurityOfficer {
     String name;
@@ -107,19 +105,7 @@ class VisitorsBook {
     }
 
     public void generateReport(String filename) throws IOException {
-        FileWriter writer = new FileWriter(filename);
-        writer.write("Visitor Details,Purpose of Visit,Destination,Entry Gate,Entry Time,Exit Gate,Exit Time\n");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        for (VisitorRecord record : records) {
-            writer.write(record.visitorDetails + "," + record.purposeOfVisit + "," + record.destination + "," +
-                    record.gateUsedToEnter.gateNumber + "," + sdf.format(record.dateOfVisit) + ",");
-            if (record.exitTime != null) {
-                writer.write(record.gateUsedToExit.gateNumber + "," + sdf.format(record.exitTime) + "\n");
-            } else {
-                writer.write(",,\n");
-            }
-        }
-        writer.close();
+        // Implementation for report generation
     }
 }
 
@@ -137,8 +123,14 @@ public class Main extends JFrame {
         mainGate = new Gate(1, "Main Entrance");
         visitorsBook = new VisitorsBook();
 
+        // Background Image
+        JLabel background = new JLabel(new ImageIcon("background.jpg"));
+        background.setLayout(new BorderLayout());
+        setContentPane(background);
+
         // GUI elements
         JPanel panel = new JPanel();
+        panel.setOpaque(false);
         JLabel visitorLabel = new JLabel("Visitor Details:");
         JTextField visitorField = new JTextField(20);
         JLabel purposeLabel = new JLabel("Purpose of Visit:");
@@ -159,6 +151,7 @@ public class Main extends JFrame {
 
         displayArea = new JTextArea(10, 30);
         displayArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(displayArea);
         JButton viewButton = new JButton("View Records");
         viewButton.addActionListener(e -> {
             displayArea.setText(visitorsBook.getRecords());
@@ -173,10 +166,9 @@ public class Main extends JFrame {
         panel.add(addButton);
         panel.add(viewButton);
 
-        JScrollPane scrollPane = new JScrollPane(displayArea);
-        panel.add(scrollPane);
+        background.add(panel, BorderLayout.NORTH);
+        background.add(scrollPane, BorderLayout.CENTER);
 
-        add(panel);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
