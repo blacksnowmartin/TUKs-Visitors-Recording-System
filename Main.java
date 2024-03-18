@@ -124,7 +124,7 @@ public class Main extends JFrame {
         visitorsBook = new VisitorsBook();
 
         // Background Image
-        JLabel background = new JLabel(new ImageIcon("background.jpg"));
+        JLabel background = new JLabel(new ImageIcon("background-img.jpg"));
         background.setLayout(new BorderLayout());
         setContentPane(background);
 
