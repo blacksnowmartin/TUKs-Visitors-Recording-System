@@ -1,3 +1,8 @@
+import java.awt.Graphics;
+import java.awt.Image;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,17 +38,20 @@ class VisitorRecord {
     String purposeOfVisit;
     String modeOfTravel;
     String report;
+    Gate gateUsedToEnter;
     Gate gateUsedToExit;
+    Date exitTime;
 
     public VisitorRecord(SecurityOfficer o, String details, String dest,
-                         String purpose, String travel, Gate exitGate) {
+                         String purpose, String travel, Gate entryGate) {
         officer = o;
         dateOfVisit = new Date();
         visitorDetails = details;
         destination = dest;
         purposeOfVisit = purpose;
         modeOfTravel = travel;
-        gateUsedToExit = exitGate;
+        gateUsedToEnter = entryGate;
+        exitTime = null;
     }
 
     public void addReport(String rep) {
@@ -52,6 +60,11 @@ class VisitorRecord {
 
     public void indicatePurpose(String purpose) {
         purposeOfVisit = purpose;
+    }
+
+    public void setExitTime(Date time, Gate exitGate) {
+        exitTime = time;
+        gateUsedToExit = exitGate;
     }
 }
 
@@ -72,9 +85,41 @@ class VisitorsBook {
             sb.append("Visitor: ").append(record.visitorDetails)
                     .append(", Purpose: ").append(record.purposeOfVisit)
                     .append(", Destination: ").append(record.destination)
-                    .append("\n");
+                    .append(", Entry Gate: ").append(record.gateUsedToEnter.gateNumber)
+                    .append(", Entry Time: ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(record.dateOfVisit));
+            if (record.exitTime != null) {
+                sb.append(", Exit Gate: ").append(record.gateUsedToExit.gateNumber)
+                        .append(", Exit Time: ").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(record.exitTime));
+            }
+            sb.append("\n");
         }
         return sb.toString();
+    }
+
+    public List<VisitorRecord> searchVisitor(String searchTerm) {
+        List<VisitorRecord> matchingRecords = new ArrayList<>();
+        for (VisitorRecord record : records) {
+            if (record.visitorDetails.toLowerCase().contains(searchTerm.toLowerCase())) {
+                matchingRecords.add(record);
+            }
+        }
+        return matchingRecords;
+    }
+
+    public void generateReport(String filename) throws IOException {
+        FileWriter writer = new FileWriter(filename);
+        writer.write("Visitor Details,Purpose of Visit,Destination,Entry Gate,Entry Time,Exit Gate,Exit Time\n");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (VisitorRecord record : records) {
+            writer.write(record.visitorDetails + "," + record.purposeOfVisit + "," + record.destination + "," +
+                    record.gateUsedToEnter.gateNumber + "," + sdf.format(record.dateOfVisit) + ",");
+            if (record.exitTime != null) {
+                writer.write(record.gateUsedToExit.gateNumber + "," + sdf.format(record.exitTime) + "\n");
+            } else {
+                writer.write(",,\n");
+            }
+        }
+        writer.close();
     }
 }
 
@@ -87,11 +132,11 @@ public class Main extends JFrame {
     public Main() {
         super("Visitor Management System");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        
+
         officer = new SecurityOfficer("John Doe", "Security Officer", List.of("Checking IDs", "Issuing passes"));
         mainGate = new Gate(1, "Main Entrance");
         visitorsBook = new VisitorsBook();
-        
+
         // GUI elements
         JPanel panel = new JPanel();
         JLabel visitorLabel = new JLabel("Visitor Details:");
@@ -111,14 +156,14 @@ public class Main extends JFrame {
             purposeField.setText("");
             destinationField.setText("");
         });
-        
+
         displayArea = new JTextArea(10, 30);
         displayArea.setEditable(false);
         JButton viewButton = new JButton("View Records");
         viewButton.addActionListener(e -> {
             displayArea.setText(visitorsBook.getRecords());
         });
-        
+
         panel.add(visitorLabel);
         panel.add(visitorField);
         panel.add(purposeLabel);
@@ -127,10 +172,10 @@ public class Main extends JFrame {
         panel.add(destinationField);
         panel.add(addButton);
         panel.add(viewButton);
-        
+
         JScrollPane scrollPane = new JScrollPane(displayArea);
         panel.add(scrollPane);
-        
+
         add(panel);
         pack();
         setLocationRelativeTo(null);
