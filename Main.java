@@ -123,12 +123,12 @@ public class Main extends JFrame {
         mainGate = new Gate(1, "Main Entrance");
         visitorsBook = new VisitorsBook();
 
-        // Background Image
-        JLabel background = new JLabel(new ImageIcon("background-img.jpg"));
-        background.setLayout(new BorderLayout());
-        setContentPane(background);
+        // Background Image for Input Panel
+        JLabel inputBackground = new JLabel(new ImageIcon("input_background.jpg"));
+        inputBackground.setLayout(new BorderLayout());
+        setContentPane(inputBackground);
 
-        // GUI elements
+        // GUI elements for Input Panel
         JPanel panel = new JPanel();
         panel.setOpaque(false);
         JLabel visitorLabel = new JLabel("Visitor Details:");
@@ -149,14 +149,7 @@ public class Main extends JFrame {
             destinationField.setText("");
         });
 
-        displayArea = new JTextArea(10, 30);
-        displayArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(displayArea);
-        JButton viewButton = new JButton("View Records");
-        viewButton.addActionListener(e -> {
-            displayArea.setText(visitorsBook.getRecords());
-        });
-
+        // Add GUI elements to Input Panel
         panel.add(visitorLabel);
         panel.add(visitorField);
         panel.add(purposeLabel);
@@ -164,10 +157,27 @@ public class Main extends JFrame {
         panel.add(destinationLabel);
         panel.add(destinationField);
         panel.add(addButton);
-        panel.add(viewButton);
+        inputBackground.add(panel, BorderLayout.NORTH);
 
-        background.add(panel, BorderLayout.NORTH);
-        background.add(scrollPane, BorderLayout.CENTER);
+        // Background Image for Display Area
+        JLabel displayBackground = new JLabel(new ImageIcon("display_background.jpg"));
+        displayBackground.setLayout(new BorderLayout());
+
+        // Display Area for Records
+        displayArea = new JTextArea(10, 30);
+        displayArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(displayArea);
+        displayBackground.add(scrollPane, BorderLayout.CENTER);
+
+        // Button to View Records
+        JButton viewButton = new JButton("View Records");
+        viewButton.addActionListener(e -> {
+            displayArea.setText(visitorsBook.getRecords());
+        });
+        displayBackground.add(viewButton, BorderLayout.SOUTH);
+
+        // Add Display Area to Content Pane
+        inputBackground.add(displayBackground, BorderLayout.CENTER);
 
         pack();
         setLocationRelativeTo(null);
@@ -178,4 +188,3 @@ public class Main extends JFrame {
         SwingUtilities.invokeLater(Main::new);
     }
 }
-/*Author Blacksnow Martin */
