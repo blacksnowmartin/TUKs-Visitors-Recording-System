@@ -124,7 +124,7 @@ public class Main extends JFrame {
         visitorsBook = new VisitorsBook();
 
         // Background Image for Input Panel
-        JLabel inputBackground = new JLabel(new ImageIcon("input_background.jpg"));
+        JLabel inputBackground = new JLabel(new ImageIcon("background-img.jpg"));
         inputBackground.setLayout(new BorderLayout());
         setContentPane(inputBackground);
 
