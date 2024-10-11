@@ -1,6 +1,21 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
+}
+
+.bg-image {
+    background-image: url('background-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.table {
+    background-color: white;
 }
 
 form {
